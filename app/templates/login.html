@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Agent-Justice</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="login-page">
+    <div class="login-box">
+        <h1>⚖️ Agent-Justice</h1>
+        <p class="login-subtitle">Gestion de dossiers juridiques</p>
+
+        <div id="login-error" class="login-error hidden"></div>
+
+        <!-- Connexion -->
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-username">Nom d'utilisateur ou email</label>
+                <input type="text" id="login-username" name="username" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Mot de passe</label>
+                <input type="password" id="login-password" name="password" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+            <p class="login-switch">Premier démarrage ? <a href="#" onclick="toggleLoginForm(true)">Créer le compte administrateur</a></p>
+        </form>
+
+        <!-- Inscription (premier compte uniquement) -->
+        <form id="register-form" class="hidden">
+            <div class="form-group">
+                <label for="register-username">Nom d'utilisateur *</label>
+                <input type="text" id="register-username" name="username" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email *</label>
+                <input type="email" id="register-email" name="email" autocomplete="email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Mot de passe * (8 caractères minimum)</label>
+                <input type="password" id="register-password" name="password" minlength="8" autocomplete="new-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Créer le compte</button>
+            <p class="login-switch"><a href="#" onclick="toggleLoginForm(false)">Retour à la connexion</a></p>
+        </form>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

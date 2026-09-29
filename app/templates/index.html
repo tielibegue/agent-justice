@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent-Justice - Gestion de dossiers juridiques</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>⚖️ Agent-Justice</h1>
+        <p>Gestion de dossiers juridiques</p>
+        <div class="user-bar">
+            <div class="notif-wrapper">
+                <button id="notif-bell" class="notif-bell" onclick="toggleNotifications()" title="Notifications">
+                    🔔<span id="notif-count" class="notif-count hidden">0</span>
+                </button>
+                <div id="notif-panel" class="notif-panel">
+                    <div class="notif-panel-header">
+                        <strong>Notifications</strong>
+                        <button onclick="markAllNotificationsRead()">Tout marquer comme lu</button>
+                    </div>
+                    <div id="notif-list"></div>
+                </div>
+            </div>
+            <span id="current-user" class="current-user"></span>
+            <button onclick="openModal('utilisateur')" class="user-btn" title="Créer un compte utilisateur">+ Utilisateur</button>
+            <button onclick="logout()" class="user-btn">Déconnexion</button>
+        </div>
+    </header>
+
+    <nav>
+        <button onclick="showSection('dashboard')" class="nav-btn active">Tableau de bord</button>
+        <button onclick="showSection('clients')" class="nav-btn">Clients</button>
+        <button onclick="showSection('affaires')" class="nav-btn">Affaires</button>
+        <button onclick="showSection('echeances')" class="nav-btn">Échéances</button>
+        <button onclick="showSection('documents')" class="nav-btn">Documents</button>
+    </nav>
+
+    <main>
+        <!-- Section Tableau de bord -->
+        <section id="dashboard" class="section active">
+            <h2>Tableau de bord</h2>
+            <div id="dashboard-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Clients</h3>
+                        <p class="stat-number" id="stat-clients">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Affaires</h3>
+                        <p class="stat-number" id="stat-affaires">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Échéances</h3>
+                        <p class="stat-number" id="stat-echeances">-</p>
+                    </div>
+                    <div class="stat-card alert">
+                        <h3>En retard</h3>
+                        <p class="stat-number" id="stat-retard">-</p>
+                    </div>
+                </div>
+                <div class="dashboard-sections">
+                    <div class="dashboard-section">
+                        <h3>Affaires par statut</h3>
+                        <div id="affaires-par-statut"></div>
+                    </div>
+                    <div class="dashboard-section">
+                        <h3>Échéances prochains 7 jours</h3>
+                        <div id="echeances-proches"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section Clients -->
+        <section id="clients" class="section">
+            <h2>Gestion des Clients</h2>
+            <div class="toolbar">
+                <input type="text" id="search-clients" placeholder="Rechercher un client..." oninput="loadClients()">
+                <button onclick="openModal('client')" class="btn btn-primary">+ Nouveau Client</button>
+            </div>
+            <div id="clients-list" class="card-list"></div>
+        </section>
+
+        <!-- Section Affaires -->
+        <section id="affaires" class="section">
+            <h2>Gestion des Affaires</h2>
+            <div class="toolbar">
+                <input type="text" id="search-affaires" placeholder="Rechercher une affaire..." oninput="loadAffaires()">
+                <select id="filter-statut" onchange="loadAffaires()">
+                    <option value="">Tous les statuts</option>
+                    <option value="ouverte">Ouverte</option>
+                    <option value="en_cours">En cours</option>
+                    <option value="suspendue">Suspendue</option>
+                    <option value="cloturee">Clôturée</option>
+                </select>
+                <button onclick="openModal('affaire')" class="btn btn-primary">+ Nouvelle Affaire</button>
+            </div>
+            <div id="affaires-list" class="card-list"></div>
+        </section>
+
+        <!-- Section Documents -->
+        <section id="documents" class="section">
+            <h2>Gestion des Documents</h2>
+            <div class="toolbar">
+                <select id="filter-docs-affaire" onchange="loadDocuments()">
+                    <option value="">Toutes les affaires</option>
+                </select>
+            </div>
+            <div id="documents-list" class="card-list"></div>
+        </section>
+
+        <!-- Section Échéances -->
+        <section id="echeances" class="section">
+            <h2>Gestion des Échéances</h2>
+            <div class="toolbar">
+                <input type="text" id="search-echeances" placeholder="Rechercher une échéance..." oninput="loadEcheances()">
+                <select id="filter-accomplie" onchange="loadEcheances()">
+                    <option value="">Toutes</option>
+                    <option value="true">Accomplies</option>
+                    <option value="false">En attente</option>
+                </select>
+                <button onclick="openModal('echeance')" class="btn btn-primary">+ Nouvelle Échéance</button>
+            </div>
+            <div id="echeances-list" class="card-list"></div>
+        </section>
+
+        <!-- Section Échéances -->
+        <section id="echeances" class="section">
+            <h2>Gestion des Échéances</h2>
+            <div class="toolbar">
+                <input type="text" id="search-echeances" placeholder="Rechercher une échéance..." oninput="loadEcheances()">
+                <select id="filter-accomplie" onchange="loadEcheances()">
+                    <option value="">Toutes</option>
+                    <option value="true">Accomplies</option>
+                    <option value="false">En attente</option>
+                </select>
+                <button onclick="openModal('echeance')" class="btn btn-primary">+ Nouvelle Échéance</button>
+            </div>
+            <div id="echeances-list" class="card-list"></div>
+        </section>
+    </main>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Nouveau</h2>
+            <form id="modal-form">
+                <!-- Champs dynamiques -->
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
